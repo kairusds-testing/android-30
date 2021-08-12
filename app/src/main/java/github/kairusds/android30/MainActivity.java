@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity{
 
 	public void showManageFiles(View view){
 		var uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
-		startActivity(new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri));
+		startActivity(new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION, uri));
 	}
 
 	public void createTestFile(View view){
