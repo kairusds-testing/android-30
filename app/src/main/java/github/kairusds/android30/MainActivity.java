@@ -22,7 +22,7 @@ import java.nio.file.StandardOpenOption;
  
 public class MainActivity extends AppCompatActivity{
 
-	private Path filePath = Paths.get("/sdcard", "test.txt");
+	private Path filePath = Paths.get("/storage/emulated/0", "test.txt");
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
