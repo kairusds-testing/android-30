@@ -35,7 +35,6 @@ public class MainActivity extends AppCompatActivity{
 		}catch(Exception err){
 			if(!ActivityCompat.shouldShowRequestPermissionRationale(AndroidLauncher.this, Manifest.permission.WRITE_EXTERNAL_STORAGE))
 				ActivityCompat.requestPermissions(AndroidLauncher.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
-				}
 			if(!ActivityCompat.shouldShowRequestPermissionRationale(AndroidLauncher.this, Manifest.permission.READ_EXTERNAL_STORAGE))
 				ActivityCompat.requestPermissions(AndroidLauncher.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
 		}
