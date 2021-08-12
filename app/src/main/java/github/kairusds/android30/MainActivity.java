@@ -10,7 +10,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
 import android.view.View;
-// import android.widget.EditText;
+import android.widget.EditText;
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity{
 	public void createTestFile(View view){
 		try{
 			var text = "Hello World";
-			var textBytes = str.getBytes();
+			var textBytes = text.getBytes();
 			Files.write(filePath, textBytes);
 			// Files.writeString(filePath, "Hello World", StandardOpenOption.APPEND);
 		}catch(IOException err){
@@ -53,8 +53,7 @@ public class MainActivity extends AppCompatActivity{
 
 	public void readTestFile(View view){
 		try{
-			var output = findViewById(R.id.output);
-			output.setText(Files.readAllLines(filePath).get(0));
+			((EditText) findViewById(R.id.output)).setText(Files.readAllLines(filePath).get(0));
 			// output.setText(Files.readString(filePath));
 		}catch(IOException err){
 			err.printStackTrace();
