@@ -16,6 +16,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.Files;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.nio.file.StandardOpenOption;
  
 public class MainActivity extends AppCompatActivity{
@@ -31,7 +33,7 @@ public class MainActivity extends AppCompatActivity{
 	public void showManageFiles(View view){
 		try{
 			var uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
-			startActivity(new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION, uri));
+			startActivity(new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri));
 		}catch(Exception err){
 			if(!ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE))
 				ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
@@ -47,7 +49,7 @@ public class MainActivity extends AppCompatActivity{
 			Files.write(filePath, textBytes);
 			// Files.writeString(filePath, "Hello World", StandardOpenOption.APPEND);
 		}catch(IOException err){
-			err.printStackTrace();
+			writeError(err);
 		}
 	}
 
@@ -56,8 +58,15 @@ public class MainActivity extends AppCompatActivity{
 			((EditText) findViewById(R.id.output)).setText(Files.readAllLines(filePath).get(0));
 			// output.setText(Files.readString(filePath));
 		}catch(IOException err){
-			err.printStackTrace();
+			writeError(err);
 		}
+	}
+
+	private void writeError(Exception err){
+		var sw = new StringWriter();
+		var pw = new PrintWriter(sw);
+		err.printStackTrace(pw);
+		((EditText) findViewById(R.id.output)).setText(sw.toString());
 	}
 
 	public void showLicenses(View view){

@@ -24,7 +24,7 @@ jobs:
         configuration-cache-enabled: true
         arguments: assembleRelease
     - name: Create signed APK
-      uses: kairusds/sign-apk@v2
+      uses: r0adkll/sign-android-release@v1
       id: sign_app
       with:
         releaseDirectory: app/build/outputs/apk/release/
