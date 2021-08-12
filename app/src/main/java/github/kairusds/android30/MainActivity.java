@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity{
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		((EditText) findViewById(R.id.output)).setText(Path.of("/sdcard").toFile().getAbsolutePath());
+		((EditText) findViewById(R.id.output)).setText(Paths.get("/sdcard").toFile().getAbsolutePath());
 	}
 
 	public void showManageFiles(View view){
