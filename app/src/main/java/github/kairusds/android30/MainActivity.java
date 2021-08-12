@@ -42,7 +42,10 @@ public class MainActivity extends AppCompatActivity{
 
 	public void createTestFile(View view){
 		try{
-			Files.writeString(filePath, "Hello World", StandardOpenOption.APPEND);
+			var text = "Hello World";
+			var textBytes = str.getBytes();
+			Files.write(filePath, textBytes);
+			// Files.writeString(filePath, "Hello World", StandardOpenOption.APPEND);
 		}catch(IOException err){
 			err.printStackTrace();
 		}
@@ -51,7 +54,8 @@ public class MainActivity extends AppCompatActivity{
 	public void readTestFile(View view){
 		try{
 			var output = findViewById(R.id.output);
-			output.setText(Files.readString(filePath));
+			output.setText(Files.readAllLines(filePath).get(0));
+			// output.setText(Files.readString(filePath));
 		}catch(IOException err){
 			err.printStackTrace();
 		}
