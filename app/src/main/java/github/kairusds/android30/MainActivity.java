@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity{
 		try{
 			Files.writeString(filePath, "Hello World", StandardOpenOption.APPEND);
 		}catch(IOException err){
-			e.printStackTrace();
+			err.printStackTrace();
 		}
 	}
 
@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity{
 			var output = findViewById(R.id.output);
 			output.setText(Files.readString(filePath));
 		}catch(IOException err){
-			e.printStackTrace();
+			err.printStackTrace();
 		}
 	}
 
