@@ -22,7 +22,7 @@ jobs:
         wrapper-cache-enabled: true
         dependencies-cache-enabled: true
         configuration-cache-enabled: true
-        arguments: assembleRelease --scan
+        arguments: check --scan
     - name: Create signed APK
       uses: r0adkll/sign-android-release@v1
       id: sign_app
