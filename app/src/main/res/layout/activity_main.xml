@@ -1,42 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="vertical"
-	android:layout_width="match_parent"
-	android:layout_height="match_parent"
-	android:gravity="top|center">
+<ScrollView 
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:fillViewport="true"
+	android:layout_centerVertical="true"
+	android:layout_centerHorizontal="true"
+	xmlns:android="http://schemas.android.com/apk/res/android">
+	<LinearLayout
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:gravity="top|center"
+		android:orientation="vertical"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent">
 
-	<EditText
-		android:id="@+id/output"
-		android:layout_width="wrap_content"
-		android:inputType="textMultiLine"
-		android:layout_height="wrap_content"
-		android:ems="10"
-		android:layout_marginTop="46dp"/>
+		<com.google.android.material.textfield.TextInputLayout
+			android:id="@+id/output"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="46dp"
+			android:hint="@string/output_hint"
+			style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+			<com.google.android.material.textfield.TextInputEditText
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"/>
+		</com.google.android.material.textfield.TextInputLayout>
 
-	<Button
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:text="Request File Permissions"
-		android:onClick="showManageFiles"
-		android:layout_marginTop="39dp"/>
+		<Button
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/request_file_perms"
+			android:onClick="requestFilePermissions"
+			android:textAllCaps="false"
+			android:layout_marginTop="39dp"/>
 
-	<Button
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:onClick="createTestFile"
-		android:text="Create Test File"/>
+		<Button
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/show_storage_volumes"
+			android:onClick="showStorageVolumes"
+			android:textAllCaps="false"
+			android:layout_marginTop="39dp"/>
 
-	<Button
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:onClick="readTestFile"
-		android:text="Read Test File"/>
+		<Button
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/create_test_file"
+			android:onClick="createTestFile"
+			android:textAllCaps="false"/>
 
-	<Button
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:text="Licenses"
-		android:onClick="showLicenses"
-		android:layout_marginTop="50dp"/>
-</LinearLayout>
+		<Button
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/read_test_file"
+			android:onClick="readTestFile"
+			android:textAllCaps="false"/>
+	</LinearLayout>
+</ScrollView>
