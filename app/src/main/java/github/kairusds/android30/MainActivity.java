@@ -136,12 +136,12 @@ public class MainActivity extends AppCompatActivity{
 	public boolean onOptionsItemSelected(MenuItem item){
 		switch(item.getItemId()){
 			case R.id.menu_about:
-				startActivity(new Intent(this, AboutActivity.class));
+				// startActivity(new Intent(this, AboutActivity.class));
 				return true;
-			case R.id.dark_theme:
+			case R.id.settings_dark_theme:
 				showSnackbar(item.isChecked() ? "Checked" : "Unchecked");
 				return true;
-			case R.id.fullscreen:
+			case R.id.settings_fullscreen:
 				showSnackbar(item.isChecked() ? "Checked" : "Unchecked");
 				return true;
 			default:
