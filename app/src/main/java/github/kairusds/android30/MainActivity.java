@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.storage.StorageManager;
 import android.os.storage.StorageVolume;
 import android.provider.Settings;
 import android.view.Menu;
@@ -31,7 +32,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity{
 
 	private Path filePath = Paths.get("/sdcard", "test.txt");
-	private List<StorageVolume> volumes = getSystemService(Context.STORAGE_SERVICE).getStorageVolumes();
+	private List<StorageVolume> volumes = ((StorageManager) getSystemService(Context.STORAGE_SERVICE)).getStorageVolumes();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
