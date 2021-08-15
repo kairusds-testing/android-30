@@ -111,7 +111,8 @@ public class MainActivity extends AppCompatActivity{
 	public void createTestFile(View view){
 		try{
 			var text = "Hello World!";
-			var textBytes = text.getBytes();
+			var textBytes = text.getBytes();
+
 			Files.write(filePath, textBytes);
 			// Files.writeString(filePath, "Hello World", StandardOpenOption.APPEND);
 		}catch(IOException err){
@@ -144,8 +145,9 @@ public class MainActivity extends AppCompatActivity{
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
+	public boolean onCreateOptionsMenu(Menu menu){
 		getMenuInflater().inflate(R.menu.menu_main, menu);
+		menu.setGroupCheckable(R.menu.settings_items, true, false);
 		return true;
 	}
 
