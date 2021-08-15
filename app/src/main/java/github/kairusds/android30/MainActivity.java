@@ -33,14 +33,14 @@ import java.util.List;
  
 public class MainActivity extends AppCompatActivity{
 
-	private Path filePath = Paths.get("/sdcard", "test.txt");
+	private Path filePath = Paths.get("/storage/emulated/0", "test.txt");
 	private List<StorageVolume> volumes;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-		volumes = ((StorageManager) getSystemService(Context.STORAGE_SERVICE)).getStorageVolumes();
 		setContentView(R.layout.activity_main);
+		volumes = ((StorageManager) getSystemService(StorageManager.class)).getStorageVolumes();
 	}
 
 	public void requestFilePermissions(View view){
@@ -67,10 +67,10 @@ public class MainActivity extends AppCompatActivity{
 		var adapter = new ArrayAdapter<String>(this, android.R.layout.select_dialog_singlechoice);
 		var volumeDescs = new ArrayList<String>();
 		for(int i = 0; i < volumes.size(); i++){
-			var currentVolume = volumes.get(i);
+			StorageVolume currentVolume = volumes.get(i);
 			if(currentVolume.getState() == Environment.MEDIA_MOUNTED){
 				adapter.add(currentVolume.getDirectory().getAbsolutePath());
-				volumeDescs.add(i, currentVolume.getDescription(MainActivity.this));
+				volumeDescs.add(currentVolume.getDescription(MainActivity.this));
 			}
 		}
 
