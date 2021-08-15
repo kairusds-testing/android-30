@@ -33,7 +33,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity{
 
 	private Path filePath = Paths.get("/sdcard", "test.txt");
-	private List<StorageVolume> volumes = ((StorageManager) getSystemService(Context.STORAGE_SERVICE)).getStorageVolumes();
+	private List<StorageVolume> volumes = ((StorageManager) getSystemService(StorageManager.class)).getStorageVolumes();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
@@ -43,9 +43,9 @@ public class MainActivity extends AppCompatActivity{
 
 	public void requestFilePermissions(View view){
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
-			var sharedStorage = new File("/sdcard");
-			if(!sharedStorage.canWrite()) // custom roms might not support writing to shared storage
-				filePath = Paths.get(getExternalFilesDir(), "test.txt");
+			/* var sharedStorage = new File("/sdcard");
+			if(!sharedStorage.canWrite()) TODO: REWRITE WITH NEW ACTIVITYRESULT API
+				filePath = Paths.get(getExternalFilesDir().getAbsolutePath(), "test.txt"); */ 
 
 			var uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
 			startActivity(new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri));
@@ -81,15 +81,19 @@ public class MainActivity extends AppCompatActivity{
 		alertDialog.setAdapter(adapter, new DialogInterface.OnClickListener(){
 			@Override
 			public void onClick(DialogInterface dialog, int which){
-				var innerDialog = new AlertDialog.Builder(this);
+				AlertDialog innerDialog = new AlertDialog.Builder(this);
 				innerDialog.setMessage(volumeDescs.get(which));
 				innerDialog.setTitle(adapter.getItem(which));
-				innerDialog.setPositiveButton("Close", (dialog1, which) -> {
-					dialog1.dismiss();
+				innerDialog.setPositiveButton("Close", new DialogInterface.OnClickListener(){
+					@Override
+					public void onClick(DialogInterface dialog1, int which1){
+						dialog1.dismiss();
+					}
 				});
-				innerDialog.setOnDismissListener(dialog1 -> {
+				innerDialog.setOnDismissListener(dialogg -> {
 					filePath = Paths.get(adapter.getItem(which), "test.txt");
 					showSnackbar("Test file path: " + filePath.toFile().getAbsolutePath());
+					return true;
 				});
 				innerDialog.show();
 			}
@@ -99,7 +103,8 @@ public class MainActivity extends AppCompatActivity{
 
 	public void createTestFile(View view){
 		try{
-			Files.write(filePath, R.string.hello_world.getBytes());
+			String text = R.string.hello_world;
+			Files.write(filePath, text.getBytes());
 			// Files.writeString(filePath, "Hello World", StandardOpenOption.APPEND);
 		}catch(IOException err){
 			writeError(err);
