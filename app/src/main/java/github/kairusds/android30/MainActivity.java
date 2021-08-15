@@ -2,6 +2,7 @@ package github.kairusds.android30;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import androidx.core.app.ActivityCompat;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,7 +10,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.storage.StorageManager;
 import android.os.storage.StorageVolume;
 import android.provider.Settings;
 import android.view.Menu;
@@ -31,7 +31,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity{
 
 	private Path filePath = Paths.get("/sdcard", "test.txt");
-	private List<StorageVolume> volumes = StorageManager.getStorageVolumes();
+	private List<StorageVolume> volumes = getSystemService(Context.STORAGE_SERVICE).getStorageVolumes();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity{
 			var innerDialog = new AlertDialog.Builder(this);
 			innerDialog.setMessage(volumeDescs.get(which));
 			innerDialog.setTitle(adapter.getItem(which));
-			innerDialog.setPositiveButton("Close", (dialog1, which) -> {
+			innerDialog.setPositiveButton("Close", (dialog1, which1) -> {
 				dialog1.dismiss();
 				return true;
 			});
