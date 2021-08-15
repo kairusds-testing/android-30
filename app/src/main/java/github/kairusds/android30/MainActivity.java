@@ -33,7 +33,7 @@ import java.util.List;
  
 public class MainActivity extends AppCompatActivity{
 
-	private Path filePath = Paths.get("/storage/emulated/0", "test.txt");
+	private Path filePath = Paths.get("/sdcard", "test.txt");
 	private List<StorageVolume> volumes;
 
 	@Override
@@ -52,10 +52,10 @@ public class MainActivity extends AppCompatActivity{
 			var uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
 			startActivity(new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri));
 		}else{
-			if(!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE))
-				ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
-			if(!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE))
-				ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+			if(!ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE))
+				ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
+			if(!ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE))
+				ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
 		}
 	}
 
@@ -67,11 +67,11 @@ public class MainActivity extends AppCompatActivity{
 		var adapter = new ArrayAdapter<String>(this, android.R.layout.select_dialog_singlechoice);
 		var volumeDescs = new ArrayList<String>();
 		for(int i = 0; i < volumes.size(); i++){
-			StorageVolume currentVolume = volumes.get(i);
-			if(currentVolume.getState() == Environment.MEDIA_MOUNTED){
+			var currentVolume = volumes.get(i);
+			// if(currentVolume.getState() == Environment.MEDIA_MOUNTED){
 				adapter.add(currentVolume.getDirectory().getAbsolutePath());
 				volumeDescs.add(currentVolume.getDescription(MainActivity.this));
-			}
+			// }
 		}
 
 		alertDialog.setNegativeButton("Close", new DialogInterface.OnClickListener(){
