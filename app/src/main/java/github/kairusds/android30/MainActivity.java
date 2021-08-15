@@ -29,11 +29,12 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.List;
  
 public class MainActivity extends AppCompatActivity{
 
 	private Path filePath = Paths.get("/sdcard", "test.txt");
-	private List<StorageVolume> volumes = ((StorageManager) getSystemService(StorageManager.class)).getStorageVolumes();
+	private List<StorageVolume> volumes = ((StorageManager) getSystemService(Context.STORAGE_SERVICE)).getStorageVolumes();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
@@ -81,7 +82,7 @@ public class MainActivity extends AppCompatActivity{
 		alertDialog.setAdapter(adapter, new DialogInterface.OnClickListener(){
 			@Override
 			public void onClick(DialogInterface dialog, int which){
-				AlertDialog innerDialog = new AlertDialog.Builder(this);
+				var innerDialog = new AlertDialog.Builder(MainActivity.this);
 				innerDialog.setMessage(volumeDescs.get(which));
 				innerDialog.setTitle(adapter.getItem(which));
 				innerDialog.setPositiveButton("Close", new DialogInterface.OnClickListener(){
@@ -93,7 +94,6 @@ public class MainActivity extends AppCompatActivity{
 				innerDialog.setOnDismissListener(dialogg -> {
 					filePath = Paths.get(adapter.getItem(which), "test.txt");
 					showSnackbar("Test file path: " + filePath.toFile().getAbsolutePath());
-					return true;
 				});
 				innerDialog.show();
 			}
@@ -103,8 +103,9 @@ public class MainActivity extends AppCompatActivity{
 
 	public void createTestFile(View view){
 		try{
-			String text = R.string.hello_world;
-			Files.write(filePath, text.getBytes());
+			var text = R.string.hello_world;
+			var textBytes = text.getBytes();
+			Files.write(filePath, textBytes);
 			// Files.writeString(filePath, "Hello World", StandardOpenOption.APPEND);
 		}catch(IOException err){
 			writeError(err);
