@@ -33,14 +33,13 @@ import java.util.List;
  
 public class MainActivity extends AppCompatActivity{
 
-	private Path filePath = Paths.get("/sdcard", "test.txt");
+	private Path filePath = Paths.get("/storage/emulated/0", "test.txt");
 	private List<StorageVolume> volumes;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		volumes = ((StorageManager) getSystemService(StorageManager.class)).getStorageVolumes();
 	}
 
 	public void requestFilePermissions(View view){
@@ -60,6 +59,13 @@ public class MainActivity extends AppCompatActivity{
 	}
 
 	public void showStorageVolumes(View view){
+		if(Build.VERSION.SDK_INT < Build.VERSION_CODES.R){
+			showSnackbar("This isn't supported for devices below Android 11.");
+			return;
+		}
+
+		List<StorageVolume> volumes = ((StorageManager) getSystemService(StorageManager.class)).getStorageVolumes();
+
 		var alertDialog = new AlertDialog.Builder(this);
 		alertDialog.setIcon(R.drawable.ic_launcher);
 		alertDialog.setTitle("List of usable storage volumes");
@@ -68,10 +74,10 @@ public class MainActivity extends AppCompatActivity{
 		var volumeDescs = new ArrayList<String>();
 		for(int i = 0; i < volumes.size(); i++){
 			var currentVolume = volumes.get(i);
-			// if(currentVolume.getState() == Environment.MEDIA_MOUNTED){
+			if(currentVolume.getState() == Environment.MEDIA_MOUNTED){
 				adapter.add(currentVolume.getDirectory().getAbsolutePath());
 				volumeDescs.add(currentVolume.getDescription(MainActivity.this));
-			// }
+			}
 		}
 
 		alertDialog.setNegativeButton("Close", new DialogInterface.OnClickListener(){
@@ -104,7 +110,7 @@ public class MainActivity extends AppCompatActivity{
 
 	public void createTestFile(View view){
 		try{
-			var text = getResources().getString(R.string.hello_world);
+			var text = "Hello World!";
 			var textBytes = text.getBytes();
 			Files.write(filePath, textBytes);
 			// Files.writeString(filePath, "Hello World", StandardOpenOption.APPEND);
