@@ -34,11 +34,12 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity{
 
 	private Path filePath = Paths.get("/sdcard", "test.txt");
-	private List<StorageVolume> volumes = ((StorageManager) getSystemService(Context.STORAGE_SERVICE)).getStorageVolumes();
+	private List<StorageVolume> volumes;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
+		volumes = ((StorageManager) getSystemService(Context.STORAGE_SERVICE)).getStorageVolumes();
 		setContentView(R.layout.activity_main);
 	}
 
