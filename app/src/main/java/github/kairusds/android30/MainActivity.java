@@ -3,6 +3,7 @@ package github.kairusds.android30;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import androidx.core.app.ActivityCompat;
 import androidx.appcompat.app.AppCompatActivity;
@@ -71,25 +72,27 @@ public class MainActivity extends AppCompatActivity{
 			}
 		}
 
-		alertDialog.setNegativeButton("Close", (dialog, which) -> {
-			dialog.dismiss();
-			 return true;
+		alertDialog.setNegativeButton("Close", new DialogInterface.OnClickListener(){
+			@Override
+			public void onClick(DialogInterface dialog, int which){
+				dialog.dismiss();
+			}
 		});
-		alertDialog.setAdapter(adapter, (dialog, which) -> {
-			var innerDialog = new AlertDialog.Builder(this);
-			innerDialog.setMessage(volumeDescs.get(which));
-			innerDialog.setTitle(adapter.getItem(which));
-			innerDialog.setPositiveButton("Close", (dialog1, which1) -> {
-				dialog1.dismiss();
-				return true;
-			});
-			innerDialog.setOnDismissListener(dialog1 -> {
-				filePath = Paths.get(adapter.getItem(which), "test.txt");
-				showSnackbar("Test file path: " + filePath.toFile().getAbsolutePath());
-				return true;
-			});
-			innerDialog.show();
-			return true;
+		alertDialog.setAdapter(adapter, new DialogInterface.OnClickListener(){
+			@Override
+			public void onClick(DialogInterface dialog, int which){
+				var innerDialog = new AlertDialog.Builder(this);
+				innerDialog.setMessage(volumeDescs.get(which));
+				innerDialog.setTitle(adapter.getItem(which));
+				innerDialog.setPositiveButton("Close", (dialog1, which) -> {
+					dialog1.dismiss();
+				});
+				innerDialog.setOnDismissListener(dialog1 -> {
+					filePath = Paths.get(adapter.getItem(which), "test.txt");
+					showSnackbar("Test file path: " + filePath.toFile().getAbsolutePath());
+				});
+				innerDialog.show();
+			}
 		});
 		alertDialog.show();
 	}
