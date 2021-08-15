@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity{
 			var currentVolume = volumes.get(i);
 			if(currentVolume.getState() == Environment.MEDIA_MOUNTED){
 				adapter.add(currentVolume.getDirectory().getAbsolutePath());
-				volumeDescs.add(i, currentVolume.getDescription());
+				volumeDescs.add(i, currentVolume.getDescription(MainActivity.this));
 			}
 		}
 
@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity{
 
 	public void createTestFile(View view){
 		try{
-			var text = R.string.hello_world;
+			var text = getResources().getString(R.string.hello_world);
 			var textBytes = text.getBytes();
 			Files.write(filePath, textBytes);
 			// Files.writeString(filePath, "Hello World", StandardOpenOption.APPEND);
