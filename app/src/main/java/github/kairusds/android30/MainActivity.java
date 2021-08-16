@@ -157,14 +157,17 @@ public class MainActivity extends AppCompatActivity{
 				// startActivity(new Intent(this, AboutActivity.class));
 				return true;
 			case R.id.settings_dark_theme:
+			case R.id.settings_fullscreen'
 				if(item.isChecked()) item.setChecked(false);
 				else item.setChecked(true);
 				showSnackbar(item.isChecked() ? "Checked" : "Unchecked");
 				return true;
+			case R.id.settings_dark_theme:
+				return true;
 			case R.id.settings_fullscreen:
-				if(item.isChecked()) item.setChecked(false);
+				/* if(item.isChecked()) item.setChecked(false);
 				else item.setChecked(true);
-				showSnackbar(item.isChecked() ? "Checked" : "Unchecked");
+				showSnackbar(item.isChecked() ? "Checked" : "Unchecked"); */
 				return true;
 			default:
 				return super.onOptionsItemSelected(item);
