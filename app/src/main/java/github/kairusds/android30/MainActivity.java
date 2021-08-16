@@ -4,9 +4,8 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Configuration;
 import android.content.Intent;
-import androidx.core.app.ActivityCompat;
-import androidx.appcompat.app.AppCompatActivity;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,16 +17,23 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+
+import androidx.core.app.ActivityCompat;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.preference.PreferenceManager;
+
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.android.material.snackbar.Snackbar;
+
 import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.Files;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
  
@@ -35,10 +41,13 @@ public class MainActivity extends AppCompatActivity{
 
 	private Path filePath = Paths.get("/storage/emulated/0", "test.txt");
 	private List<StorageVolume> volumes;
+	private PreferenceManager preferences;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
+		preferences = PreferenceManager.getDefaultSharedPreferences(this);
+		switchTheme();
 		setContentView(R.layout.activity_main);
 	}
 
@@ -129,6 +138,21 @@ public class MainActivity extends AppCompatActivity{
 		}
 	}
 
+	public void showLicenses(View view){
+		startActivity(new Intent(this, OssLicensesMenuActivity.class));
+	}
+
+	private void switchTheme(){
+		AppCompatDelegate.setDefaultNightMode(preferences.getBoolean("DarkTheme", isNightMode()) ?
+			AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO
+		);
+	}
+
+	public boolean isNightMode(){
+		int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+		return nightModeFlags == Configuration.UI_MODE_NIGHT_YES;
+	}
+
 	private void showSnackbar(String text){
 		Snackbar.make(findViewById(android.R.id.content), text, Snackbar.LENGTH_LONG).show();
 	}
@@ -138,36 +162,32 @@ public class MainActivity extends AppCompatActivity{
 		var pw = new PrintWriter(sw);
 		err.printStackTrace(pw);
 		((TextInputLayout) findViewById(R.id.output)).getEditText().setText(sw.toString());
-	}
-
-	public void showLicenses(View view){
-		startActivity(new Intent(this, OssLicensesMenuActivity.class));
-	}
+	}	
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu){
 		getMenuInflater().inflate(R.menu.menu_main, menu);
+		menu.findItem(R.id.settings_dark_theme).setChecked(preferences.getBoolean("DarkTheme", isNightMode()));
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item){
+		if(item.isCheckable()){
+			if(item.isChecked()) item.setChecked(false);
+			else item.setChecked(true);
+		}
+
 		switch(item.getItemId()){
 			case R.id.menu_about:
 				// startActivity(new Intent(this, AboutActivity.class));
 				return true;
 			case R.id.settings_dark_theme:
-			case R.id.settings_fullscreen'
-				if(item.isChecked()) item.setChecked(false);
-				else item.setChecked(true);
-				showSnackbar(item.isChecked() ? "Checked" : "Unchecked");
-				return true;
-			case R.id.settings_dark_theme:
+				prefs.edit().putBoolean("DarkTheme", item.isChecked()).apply();
+				switchTheme();
 				return true;
 			case R.id.settings_fullscreen:
-				/* if(item.isChecked()) item.setChecked(false);
-				else item.setChecked(true);
-				showSnackbar(item.isChecked() ? "Checked" : "Unchecked"); */
+				showSnackbar(item.isChecked() ? "Checked" : "Unchecked");
 				return true;
 			default:
 				return super.onOptionsItemSelected(item);
