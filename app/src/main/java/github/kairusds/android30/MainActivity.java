@@ -150,8 +150,7 @@ public class MainActivity extends AppCompatActivity{
 	}
 
 	public boolean isNightMode(){
-		int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
-		return nightModeFlags == Configuration.UI_MODE_NIGHT_YES;
+		return (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
 	}
 
 	private void showSnackbar(String text){
@@ -164,6 +163,27 @@ public class MainActivity extends AppCompatActivity{
 		err.printStackTrace(pw);
 		((TextInputLayout) findViewById(R.id.output)).getEditText().setText(sw.toString());
 	}	
+
+	private void hideSystemUI() {
+		View decorView = getWindow().getDecorView();
+		decorView.setSystemUiVisibility(
+			View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+			| View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+			| View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+			| View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+			| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+			| View.SYSTEM_UI_FLAG_FULLSCREEN
+		);
+	}
+
+	private void showSystemUI() {
+		View decorView = getWindow().getDecorView();
+		decorView.setSystemUiVisibility(
+			View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+			| View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+			| View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+		);
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu){
@@ -188,10 +208,20 @@ public class MainActivity extends AppCompatActivity{
 				switchTheme();
 				return true;
 			case R.id.settings_fullscreen:
-				showSnackbar(item.isChecked() ? "Checked" : "Unchecked");
+				preferences.edit().putBoolean("DarkTheme", item.isChecked()).apply();
+				if(item.isChecked()) hideSystemUI();
+				else showSystemUI();
 				return true;
 			default:
 				return super.onOptionsItemSelected(item);
+		}
+	}
+
+	@Override
+	public void onWindowFocusChanged(boolean hasFocus){
+		super.onWindowFocusChanged(hasFocus);
+		if(hasFocus && preferences.getBoolean("Fullscreen", false)){
+			hideSystemUI();
 		}
 	}
 
