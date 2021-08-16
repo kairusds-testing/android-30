@@ -20,7 +20,7 @@ import android.widget.ArrayAdapter;
 
 import androidx.core.app.ActivityCompat;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
