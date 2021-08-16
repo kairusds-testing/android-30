@@ -20,9 +20,9 @@
 
 		<activity
 			android:name="com.google.android.gms.oss.licenses.OssLicensesMenuActivity"
-			android:theme="@style/AppTheme"/>
+			android:theme="@style/Theme.App"/>
 		<activity
 			android:name="com.google.android.gms.oss.licenses.OssLicensesActivity"
-			android:theme="@style/AppTheme"/>
+			android:theme="@style/Theme.App"/>
 	</application>
 </manifest>
