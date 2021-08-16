@@ -157,9 +157,13 @@ public class MainActivity extends AppCompatActivity{
 				// startActivity(new Intent(this, AboutActivity.class));
 				return true;
 			case R.id.settings_dark_theme:
+				if(item.isChecked()) item.setChecked(false);
+				else item.setChecked(true);
 				showSnackbar(item.isChecked() ? "Checked" : "Unchecked");
 				return true;
 			case R.id.settings_fullscreen:
+				if(item.isChecked()) item.setChecked(false);
+				else item.setChecked(true);
 				showSnackbar(item.isChecked() ? "Checked" : "Unchecked");
 				return true;
 			default:

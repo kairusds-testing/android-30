@@ -8,12 +8,10 @@
 		app:showAsAction="never"
 		android:title="@string/about"/>
 	<item
-		android:id="@+id/menu_settings"
 		app:showAsAction="never"
 		android:title="@string/settings">
 		<menu>
 			<group
-				android:id="@+id/settings_items"
 				android:checkableBehavior="all">
 					<item
 						android:id="@+id/settings_dark_theme"
