@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -41,7 +42,7 @@ public class MainActivity extends AppCompatActivity{
 
 	private Path filePath = Paths.get("/storage/emulated/0", "test.txt");
 	private List<StorageVolume> volumes;
-	private PreferenceManager preferences;
+	private SharedPreferences preferences;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
