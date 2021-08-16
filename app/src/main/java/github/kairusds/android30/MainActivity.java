@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity{
 				// startActivity(new Intent(this, AboutActivity.class));
 				return true;
 			case R.id.settings_dark_theme:
-				prefs.edit().putBoolean("DarkTheme", item.isChecked()).apply();
+				preferences.edit().putBoolean("DarkTheme", item.isChecked()).apply();
 				switchTheme();
 				return true;
 			case R.id.settings_fullscreen:
