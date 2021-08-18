@@ -171,7 +171,7 @@ public class MainActivity extends AppCompatActivity{
 		View decorView = getWindow().getDecorView();
 		decorView.setSystemUiVisibility(
 			// View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-			| View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+			View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
 			| View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 	}
 
