@@ -40,7 +40,7 @@ import java.util.List;
  
 public class MainActivity extends AppCompatActivity{
 
-	private Path filePath = Paths.get("/storage/emulated/0", "test.txt");
+	private Path filePath = Paths.get("/sdcard", "test.txt");
 	private List<StorageVolume> volumes;
 	private SharedPreferences preferences;
 
@@ -49,33 +49,29 @@ public class MainActivity extends AppCompatActivity{
 		super.onCreate(savedInstanceState);
 		preferences = PreferenceManager.getDefaultSharedPreferences(this);
 		switchTheme();
+		volumes = ((StorageManager) getSystemService(StorageManager.class)).getStorageVolumes();
+		if(preferences.getBoolean("Fullscreen", false)) hideSystemUI();
 		setContentView(R.layout.activity_main);
 	}
 
 	public void requestFilePermissions(View view){
+		var uri = Uri.parse("package:" + getPackageName());
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
 			/* var sharedStorage = new File("/sdcard");
 			if(!sharedStorage.canWrite()) TODO: REWRITE WITH NEW ACTIVITYRESULT API
 				filePath = Paths.get(getExternalFilesDir().getAbsolutePath(), "test.txt"); */ 
-
-			var uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
 			startActivity(new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri));
 		}else{
-			if(!ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE))
-				ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
-			if(!ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE))
-				ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+			if(Build.VERSION.SDK_INT == Build.VERSION_CODES.Q){
+				startActivity(new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, uri));
+			}
+			var writeExternalStorage = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+			if(!ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, writeExternalStorage))
+				ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, writeExternalStorage}, 0);
 		}
 	}
 
 	public void showStorageVolumes(View view){
-		if(Build.VERSION.SDK_INT < Build.VERSION_CODES.R){
-			showSnackbar("This isn't supported for devices below Android 11.");
-			return;
-		}
-
-		List<StorageVolume> volumes = ((StorageManager) getSystemService(StorageManager.class)).getStorageVolumes();
-
 		var alertDialog = new AlertDialog.Builder(this);
 		alertDialog.setIcon(R.drawable.ic_launcher);
 		alertDialog.setTitle("List of usable storage volumes");
@@ -139,10 +135,6 @@ public class MainActivity extends AppCompatActivity{
 		}
 	}
 
-	public void showLicenses(View view){
-		startActivity(new Intent(this, OssLicensesMenuActivity.class));
-	}
-
 	private void switchTheme(){
 		AppCompatDelegate.setDefaultNightMode(preferences.getBoolean("DarkTheme", isNightMode()) ?
 			AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO
@@ -167,13 +159,12 @@ public class MainActivity extends AppCompatActivity{
 	private void hideSystemUI() {
 		View decorView = getWindow().getDecorView();
 		decorView.setSystemUiVisibility(
-			View.SYSTEM_UI_FLAG_IMMERSIVE
+			View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
 			| View.SYSTEM_UI_FLAG_LAYOUT_STABLE
 			| View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
 			| View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
 			| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-			| View.SYSTEM_UI_FLAG_FULLSCREEN
-		);
+			| View.SYSTEM_UI_FLAG_FULLSCREEN);
 	}
 
 	private void showSystemUI() {
@@ -181,8 +172,7 @@ public class MainActivity extends AppCompatActivity{
 		decorView.setSystemUiVisibility(
 			View.SYSTEM_UI_FLAG_LAYOUT_STABLE
 			| View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-			| View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-		);
+			| View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 	}
 
 	@Override
@@ -200,8 +190,8 @@ public class MainActivity extends AppCompatActivity{
 		}
 
 		switch(item.getItemId()){
-			case R.id.menu_about:
-				// startActivity(new Intent(this, AboutActivity.class));
+			case R.id.menu_licenses:
+				startActivity(new Intent(this, OssLicensesMenuActivity.class));
 				return true;
 			case R.id.settings_dark_theme:
 				preferences.edit().putBoolean("DarkTheme", item.isChecked()).apply();
@@ -220,9 +210,7 @@ public class MainActivity extends AppCompatActivity{
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus){
 		super.onWindowFocusChanged(hasFocus);
-		if(hasFocus && preferences.getBoolean("Fullscreen", false)){
-			hideSystemUI();
-		}
+		if(hasFocus && preferences.getBoolean("Fullscreen", false)) hideSystemUI();
 	}
 
 }
