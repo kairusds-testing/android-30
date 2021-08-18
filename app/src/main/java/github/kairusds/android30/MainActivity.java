@@ -179,6 +179,7 @@ public class MainActivity extends AppCompatActivity{
 	public boolean onCreateOptionsMenu(Menu menu){
 		getMenuInflater().inflate(R.menu.menu_main, menu);
 		menu.findItem(R.id.settings_dark_theme).setChecked(preferences.getBoolean("DarkTheme", isNightMode()));
+		menu.findItem(R.id.settings_fullscreen).setChecked(preferences.getBoolean("Fullscreen", false));
 		return true;
 	}
 
@@ -198,7 +199,7 @@ public class MainActivity extends AppCompatActivity{
 				switchTheme();
 				return true;
 			case R.id.settings_fullscreen:
-				preferences.edit().putBoolean("DarkTheme", item.isChecked()).apply();
+				preferences.edit().putBoolean("Fullscreen", item.isChecked()).apply();
 				if(item.isChecked()) hideSystemUI();
 				else showSystemUI();
 				return true;
