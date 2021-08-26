@@ -41,6 +41,10 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity{
 
 	private Path filePath = Paths.get("/sdcard", "test.txt");
+	private Path documentFilePath = Paths.get(
+		getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath(),
+		"docdirtest.txt"
+	);
 	private List<StorageVolume> volumes;
 	private SharedPreferences preferences;
 
@@ -129,6 +133,27 @@ public class MainActivity extends AppCompatActivity{
 	public void readTestFile(View view){
 		try{
 			((TextInputLayout) findViewById(R.id.output)).getEditText().setText(Files.readAllLines(filePath).get(0));
+			// output.setText(Files.readString(filePath));
+		}catch(IOException err){
+			writeError(err);
+		}
+	}
+
+	public void createDocumentsTestFile(View view){
+		try{
+			var text = "Hello World!";
+			var textBytes = text.getBytes();
+
+			Files.write(documentFilePath, textBytes);
+			// Files.writeString(filePath, "Hello World", StandardOpenOption.APPEND);
+		}catch(IOException err){
+			writeError(err);
+		}
+	}
+
+	public void readDocumentsTestFile(View view){
+		try{
+			((TextInputLayout) findViewById(R.id.output)).getEditText().setText(Files.readAllLines(documentFilePath).get(0));
 			// output.setText(Files.readString(filePath));
 		}catch(IOException err){
 			writeError(err);
