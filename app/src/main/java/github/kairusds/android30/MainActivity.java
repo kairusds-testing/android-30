@@ -41,10 +41,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity{
 
 	private Path filePath = Paths.get("/sdcard", "test.txt");
-	private Path documentFilePath = Paths.get(
-		getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath(),
-		"docdirtest.txt"
-	);
+	private Path documentFilePath;
 	private List<StorageVolume> volumes;
 	private SharedPreferences preferences;
 
@@ -55,6 +52,10 @@ public class MainActivity extends AppCompatActivity{
 		switchTheme();
 		volumes = ((StorageManager) getSystemService(StorageManager.class)).getStorageVolumes();
 		if(preferences.getBoolean("Fullscreen", false)) hideSystemUI();
+		documentFilePath = Paths.get(
+			getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath(),
+			"docdirtest.txt"
+		);
 		setContentView(R.layout.activity_main);
 	}
 
