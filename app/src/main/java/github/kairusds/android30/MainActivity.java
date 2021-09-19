@@ -126,26 +126,13 @@ public class MainActivity extends AppCompatActivity{
 		});
 
 		getButton(R.id.getHostInfo).setOnClickListener(v -> {
-			new AsyncTaskLoader().execute(new AsyncCallback(){
-				public void run(){
-					try{
-						var api = new URL("http://ip-api.com/line");
-						var in = new BufferedReader(new InputStreamReader(api.openStream()));
-						var line = "";
-						var builder = new StringBuilder();
-				
-						while((line = in.readLine()) != null){
-							builder.append(line);
-						}
-				
-						in.close();
-						((TextInputLayout) findViewById(R.id.output)).getEditText().setText(builder.toString());
-					}catch(Exception err){
-						writeError(err);
-					}
-				}
-				public void onComplete(){}
-			});
+			var text = getTextFromURL("http://ip-api.com/line");
+			((TextInputLayout) findViewById(R.id.output)).getEditText().setText(text);
+		});
+
+		getButton(R.id.getUserAgent).setOnClickListener(v -> {
+			var text = getTextFromURL("https://ibancho.herokuapp.com/ua.php");
+			((TextInputLayout) findViewById(R.id.output)).getEditText().setText(text);
 		});
 
 		getButton(R.id.createTestFile).setOnClickListener(v -> {
@@ -182,6 +169,30 @@ public class MainActivity extends AppCompatActivity{
 
 	public boolean isNightMode(){
 		return (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
+	}
+
+	private String getTextFromURL(String url){
+		new AsyncTaskLoader().execute(new AsyncCallback(){
+			public void run(){
+				try{
+					var api = new URL(url);
+					var in = new BufferedReader(new InputStreamReader(api.openStream()));
+					var line = "";
+					var builder = new StringBuilder();
+			
+					while((line = in.readLine()) != null){
+						builder.append(line + "\n");
+					}
+			
+					in.close();
+					return builder.toString();
+				}catch(Exception err){
+					throw new RuntimeException(err.getMessage());
+				}
+			}
+			public void onComplete(){}
+		});
+		return null;
 	}
 
 	private void showSnackbar(String text){

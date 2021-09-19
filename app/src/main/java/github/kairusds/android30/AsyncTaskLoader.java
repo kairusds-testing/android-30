@@ -7,7 +7,7 @@ public class AsyncTaskLoader extends AsyncTask<AsyncCallback, Void, Boolean>{
 	private AsyncCallback[] callbacks;
 
 	@Override
-	protected Boolean doInBackground(AsyncCallback... callbacks) {
+	protected Boolean doInBackground(AsyncCallback... callbacks){
 		this.callbacks = callbacks;
 		for(AsyncCallback callback : callbacks){
 			callback.run();

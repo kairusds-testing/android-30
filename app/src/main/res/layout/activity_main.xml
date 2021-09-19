@@ -49,6 +49,13 @@
 		<Button
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
+			android:text="@string/get_user_agent"
+			android:id="@+id/getUserAgent"
+			android:textAllCaps="false"/>
+
+		<Button
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
 			android:text="@string/create_test_file"
 			android:id="@+id/createTestFile"
 			android:textAllCaps="false"/>

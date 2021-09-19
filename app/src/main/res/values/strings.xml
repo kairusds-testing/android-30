@@ -11,4 +11,5 @@
 	<string name="dark_theme">Dark theme</string>
 	<string name="fullscreen">Fullscreen</string>
 	<string name="get_host_info">Get Host Info</string>
+	<string name="get_user_agent">Get User Agent</string>
 </resources>
