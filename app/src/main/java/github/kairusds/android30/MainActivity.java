@@ -191,11 +191,9 @@ public class MainActivity extends AppCompatActivity{
 					throw new RuntimeException(err.getMessage());
 				}
 			}
-			public void onComplete(){
-				return str;
-			}
+			public void onComplete(){}
 		});
-		return null;
+		return str;
 	}
 
 	private void showSnackbar(String text){
