@@ -2,7 +2,7 @@ package github.kairusds.android30;
 
 import android.os.AsyncTask;
 
-public class AsyncTaskLoader extends AsyncTask<AsyncCallback, Integer, Boolean> {
+public class AsyncTaskLoader extends AsyncTask<AsyncCallback, Void, Boolean>{
 
 	private AsyncCallback callback;
 
