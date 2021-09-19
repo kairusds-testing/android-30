@@ -42,6 +42,13 @@
 		<Button
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
+			android:text="@string/get_host_info"
+			android:onClick="getHostInfo"
+			android:textAllCaps="false"/>
+
+		<Button
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
 			android:text="@string/create_test_file"
 			android:onClick="createTestFile"
 			android:textAllCaps="false"/>
