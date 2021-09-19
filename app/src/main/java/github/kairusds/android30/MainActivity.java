@@ -126,21 +126,26 @@ public class MainActivity extends AppCompatActivity{
 		});
 
 		getButton(R.id.getHostInfo).setOnClickListener(v -> {
-			try{
-				var api = new URL("http://ip-api.com/line");
-				var in = new BufferedReader(new InputStreamReader(api.openStream()));
-				var line = "";
-				var builder = new StringBuilder();
-		
-				while((line = in.readLine()) != null){
-					builder.append(line);
+			new AsyncTaskLoader().execute(new AsyncCallback(){
+				public void run(){
+					try{
+						var api = new URL("http://ip-api.com/line");
+						var in = new BufferedReader(new InputStreamReader(api.openStream()));
+						var line = "";
+						var builder = new StringBuilder();
+				
+						while((line = in.readLine()) != null){
+							builder.append(line);
+						}
+				
+						in.close();
+						((TextInputLayout) findViewById(R.id.output)).getEditText().setText(builder.toString());
+					}catch(Exception err){
+						writeError(err);
+					}
 				}
-		
-				in.close();
-				((TextInputLayout) findViewById(R.id.output)).getEditText().setText(builder.toString());
-			}catch(Exception err){
-				writeError(err);
-			}
+				public void onComplete(){}
+			})
 		});
 
 		getButton(R.id.createTestFile).setOnClickListener(v -> {
