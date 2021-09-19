@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity{
 					}
 				}
 				public void onComplete(){}
-			})
+			});
 		});
 
 		getButton(R.id.createTestFile).setOnClickListener(v -> {
