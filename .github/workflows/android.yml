@@ -19,10 +19,7 @@ jobs:
     - name: Build app release
       uses: gradle/gradle-build-action@v1
       with:
-        wrapper-cache-enabled: true
-        dependencies-cache-enabled: true
-        configuration-cache-enabled: true
-        arguments: assembleRelease
+        arguments: build
     - name: Create signed APK
       uses: r0adkll/sign-android-release@v1
       id: sign_app
