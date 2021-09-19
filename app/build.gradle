@@ -8,6 +8,7 @@ android{
 
 	defaultConfig{
 		applicationId "github.kairusds.android30"
+		minSdkVersion 21
 		targetSdkVersion 30
 		versionCode 01
 		versionName "0.2.0"

@@ -29,49 +29,35 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:text="@string/request_file_perms"
-			android:onClick="requestFilePermissions"
+			android:id="@+id/requestFilePermissions"
 			android:textAllCaps="false"/>
 
 		<Button
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:text="@string/show_storage_volumes"
-			android:onClick="showStorageVolumes"
+			android:id="@+id/showStorageVolumes"
 			android:textAllCaps="false"/>
 
 		<Button
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:text="@string/get_host_info"
-			android:onClick="getHostInfo"
+			android:id="@+id/getHostInfo"
 			android:textAllCaps="false"/>
 
 		<Button
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:text="@string/create_test_file"
-			android:onClick="createTestFile"
+			android:id="@+id/createTestFile"
 			android:textAllCaps="false"/>
 
 		<Button
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:text="@string/read_test_file"
-			android:onClick="readTestFile"
-			android:textAllCaps="false"/>
-
-		<Button
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="@string/create_documents_test_file"
-			android:onClick="createDocumentsTestFile"
-			android:textAllCaps="false"/>
-
-		<Button
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="@string/read_documents_test_file"
-			android:onClick="readDocumentsTestFile"
+			android:id="@+id/readTestFile"
 			android:textAllCaps="false"/>
 	</LinearLayout>
 </ScrollView>

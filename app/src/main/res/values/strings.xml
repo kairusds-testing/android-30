@@ -6,8 +6,6 @@
 	<string name="show_storage_volumes">Show storage volumes</string>
 	<string name="create_test_file">Create test file</string>
 	<string name="read_test_file">Read test file</string>
-	<string name="create_documents_test_file">Create test file from Documents</string>
-	<string name="read_documents_test_file">Read test file from Documents</string>
 	<string name="licenses">Open source licenses</string>
 	<string name="settings">Settings</string>
 	<string name="dark_theme">Dark theme</string>

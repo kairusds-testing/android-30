@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 
 import androidx.core.app.ActivityCompat;
 import androidx.appcompat.app.AppCompatActivity;
@@ -44,7 +45,6 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity{
 
 	private Path filePath = Paths.get("/sdcard", "test.txt");
-	private Path documentFilePath;
 	private List<StorageVolume> volumes;
 	private SharedPreferences preferences;
 
@@ -55,131 +55,113 @@ public class MainActivity extends AppCompatActivity{
 		switchTheme();
 		volumes = ((StorageManager) getSystemService(StorageManager.class)).getStorageVolumes();
 		if(preferences.getBoolean("Fullscreen", false)) hideSystemUI();
-		documentFilePath = Paths.get(
-			getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath(),
-			"docdirtest.txt"
-		);
 		setContentView(R.layout.activity_main);
+		setOnClickListeners();
 	}
 
-	public void requestFilePermissions(View view){
-		var uri = Uri.parse("package:" + getPackageName());
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
-			/* var sharedStorage = new File("/sdcard");
-			if(!sharedStorage.canWrite()) TODO: REWRITE WITH NEW ACTIVITYRESULT API
-				filePath = Paths.get(getExternalFilesDir().getAbsolutePath(), "test.txt"); */ 
-			startActivity(new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri));
-		}else{
-			if(Build.VERSION.SDK_INT == Build.VERSION_CODES.Q){
-				startActivity(new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, uri));
-			}
-			var writeExternalStorage = Manifest.permission.WRITE_EXTERNAL_STORAGE;
-			if(!ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, writeExternalStorage))
-				ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, writeExternalStorage}, 0);
-		}
-	}
-
-	public void showStorageVolumes(View view){
-		var alertDialog = new AlertDialog.Builder(this);
-		alertDialog.setIcon(R.drawable.ic_launcher);
-		alertDialog.setTitle("List of usable storage volumes");
-
-		var adapter = new ArrayAdapter<String>(this, android.R.layout.select_dialog_singlechoice);
-		var volumeDescs = new ArrayList<String>();
-		for(int i = 0; i < volumes.size(); i++){
-			var currentVolume = volumes.get(i);
-			if(currentVolume.getState() == Environment.MEDIA_MOUNTED){
-				adapter.add(currentVolume.getDirectory().getAbsolutePath());
-				volumeDescs.add(currentVolume.getDescription(MainActivity.this));
-			}
-		}
-
-		alertDialog.setNegativeButton("Close", new DialogInterface.OnClickListener(){
-			@Override
-			public void onClick(DialogInterface dialog, int which){
-				dialog.dismiss();
+	private void setOnClickListeners(){
+		getButton(R.id.requestFilePermissions).setOnClickListener(v -> {
+			var uri = Uri.parse("package:" + getPackageName());
+			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
+				/* var sharedStorage = new File("/sdcard");
+				if(!sharedStorage.canWrite()) TODO: REWRITE WITH NEW ACTIVITYRESULT API
+					filePath = Paths.get(getExternalFilesDir().getAbsolutePath(), "test.txt"); */ 
+				startActivity(new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri));
+			}else{
+				if(Build.VERSION.SDK_INT == Build.VERSION_CODES.Q){
+					startActivity(new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, uri));
+				}
+				var writeExternalStorage = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+				if(!ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, writeExternalStorage))
+					ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, writeExternalStorage}, 0);
 			}
 		});
-		alertDialog.setAdapter(adapter, new DialogInterface.OnClickListener(){
-			@Override
-			public void onClick(DialogInterface dialog, int which){
-				var innerDialog = new AlertDialog.Builder(MainActivity.this);
-				innerDialog.setMessage(volumeDescs.get(which));
-				innerDialog.setTitle(adapter.getItem(which));
-				innerDialog.setPositiveButton("Close", new DialogInterface.OnClickListener(){
-					@Override
-					public void onClick(DialogInterface dialog1, int which1){
-						dialog1.dismiss();
-					}
-				});
-				innerDialog.setOnDismissListener(dialogg -> {
-					filePath = Paths.get(adapter.getItem(which), "test.txt");
-					showSnackbar("Test file path: " + filePath.toFile().getAbsolutePath());
-				});
-				innerDialog.show();
+
+		getButton(R.id.showStorageVolumes).setOnClickListener(v -> {
+			var alertDialog = new AlertDialog.Builder(this);
+			alertDialog.setIcon(R.drawable.ic_launcher);
+			alertDialog.setTitle("List of usable storage volumes");
+	
+			var adapter = new ArrayAdapter<String>(this, android.R.layout.select_dialog_singlechoice);
+			var volumeDescs = new ArrayList<String>();
+			for(int i = 0; i < volumes.size(); i++){
+				var currentVolume = volumes.get(i);
+				if(currentVolume.getState() == Environment.MEDIA_MOUNTED){
+					adapter.add(currentVolume.getDirectory().getAbsolutePath());
+					volumeDescs.add(currentVolume.getDescription(MainActivity.this));
+				}
+			}
+	
+			alertDialog.setNegativeButton("Close", new DialogInterface.OnClickListener(){
+				@Override
+				public void onClick(DialogInterface dialog, int which){
+					dialog.dismiss();
+				}
+			});
+			alertDialog.setAdapter(adapter, new DialogInterface.OnClickListener(){
+				@Override
+				public void onClick(DialogInterface dialog, int which){
+					var innerDialog = new AlertDialog.Builder(MainActivity.this);
+					innerDialog.setMessage(volumeDescs.get(which));
+					innerDialog.setTitle(adapter.getItem(which));
+					innerDialog.setPositiveButton("Close", new DialogInterface.OnClickListener(){
+						@Override
+						public void onClick(DialogInterface dialog1, int which1){
+							dialog1.dismiss();
+						}
+					});
+					innerDialog.setOnDismissListener(dialogg -> {
+						filePath = Paths.get(adapter.getItem(which), "test.txt");
+						showSnackbar("Test file path: " + filePath.toFile().getAbsolutePath());
+					});
+					innerDialog.show();
+				}
+			});
+			alertDialog.show();
+		});
+
+		getButton(R.id.getHostInfo).setOnClickListener(v -> {
+			try{
+				var api = new URL("http://ip-api.com/line");
+				var in = new BufferedReader(new InputStreamReader(api.openStream()));
+				var line = "";
+				var builder = new StringBuilder();
+		
+				while((line = in.readLine()) != null){
+					builder.append(line);
+				}
+		
+				in.close();
+				((TextInputLayout) findViewById(R.id.output)).getEditText().setText(builder.toString());
+			}catch(Exception err){
+				writeError(err);
 			}
 		});
-		alertDialog.show();
-	}
 
-	public void getHostInfo(){
-		try{
-			var api = new URL("http://ip-api.com/line");
-			var in = new BufferedReader(new InputStreamReader(api.openStream()));
-			var line = "";
-			var builder = new StringBuilder();
+		getButton(R.id.createTestFile).setOnClickListener(v -> {
+			try{
+				var text = "Hello World!";
+				var textBytes = text.getBytes();
 	
-			while((line = in.readLine()) != null){
-				builder.append(line);
+				Files.write(filePath, textBytes);
+				// Files.writeString(filePath, "Hello World", StandardOpenOption.APPEND);
+			}catch(IOException err){
+				writeError(err);
 			}
-	
-			in.close();
-			((TextInputLayout) findViewById(R.id.output)).getEditText().setText(builder.toString());
-		}catch(Exception err){
-			writeError(err);
-		}
+		});
+
+		getButton(R.id.readTestFile).setOnClickListener(v -> {
+			try{
+				((TextInputLayout) findViewById(R.id.output)).getEditText().setText(Files.readAllLines(filePath).get(0));
+				// output.setText(Files.readString(filePath));
+			}catch(IOException err){
+				writeError(err);
+			}
+		});
 	}
 
-	public void createTestFile(View view){
-		try{
-			var text = "Hello World!";
-			var textBytes = text.getBytes();
-
-			Files.write(filePath, textBytes);
-			// Files.writeString(filePath, "Hello World", StandardOpenOption.APPEND);
-		}catch(IOException err){
-			writeError(err);
-		}
-	}
-
-	public void readTestFile(View view){
-		try{
-			((TextInputLayout) findViewById(R.id.output)).getEditText().setText(Files.readAllLines(filePath).get(0));
-			// output.setText(Files.readString(filePath));
-		}catch(IOException err){
-			writeError(err);
-		}
-	}
-
-	public void createDocumentsTestFile(View view){
-		try{
-			var text = "Hello World!";
-			var textBytes = text.getBytes();
-
-			Files.write(documentFilePath, textBytes);
-			// Files.writeString(filePath, "Hello World", StandardOpenOption.APPEND);
-		}catch(IOException err){
-			writeError(err);
-		}
-	}
-
-	public void readDocumentsTestFile(View view){
-		try{
-			((TextInputLayout) findViewById(R.id.output)).getEditText().setText(Files.readAllLines(documentFilePath).get(0));
-			// output.setText(Files.readString(filePath));
-		}catch(IOException err){
-			writeError(err);
-		}
+	private Button getButton(int id){
+		return ((Button) findViewById(id));
 	}
 
 	private void switchTheme(){
