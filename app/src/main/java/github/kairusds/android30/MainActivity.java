@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity{
 	private Path filePath = Paths.get("/sdcard", "test.txt");
 	private List<StorageVolume> volumes;
 	private SharedPreferences preferences;
+	private volatile String str;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
@@ -185,12 +186,14 @@ public class MainActivity extends AppCompatActivity{
 					}
 			
 					in.close();
-					return builder.toString();
+					str = builder.toString();
 				}catch(Exception err){
 					throw new RuntimeException(err.getMessage());
 				}
 			}
-			public void onComplete(){}
+			public void onComplete(){
+				return str;
+			}
 		});
 		return null;
 	}
