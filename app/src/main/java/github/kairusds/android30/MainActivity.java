@@ -78,6 +78,11 @@ public class MainActivity extends AppCompatActivity{
 		});
 
 		getButton(R.id.showStorageVolumes).setOnClickListener(v -> {
+			if(Build.VERSION.SDK_INT < Build.VERSION_CODES.R){
+				showSnackbar("This feature is only available to Android 11+");
+				return;
+			}
+
 			var alertDialog = new AlertDialog.Builder(this);
 			alertDialog.setIcon(R.drawable.ic_launcher);
 			alertDialog.setTitle("List of usable storage volumes");
